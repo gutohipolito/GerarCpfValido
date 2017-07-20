@@ -9,12 +9,29 @@ namespace GerarCpfValido
 {
     class Program
     {
+        private static Random _random;
+        private static object syncObj = new object();
+
+        private static void InitRandomNumber(int seed)
+        {
+            _random = new Random(seed);
+        }
+
+        private static string GenerateRandomNumber()
+        {
+            lock (syncObj)
+            {
+                if (_random == null)
+                    _random = new Random(); // Or exception...
+                return _random.Next(100000000, 999999999).ToString();
+            }
+        }
+
         static void Main(string[] args)
         {
             var cpfs = 0;
             Console.WriteLine("Digite a quantidade de CPFs que deseja retornar:");
             cpfs = int.Parse(Console.ReadLine());
-
             for (int i = 0; i < cpfs; i++)
             {
                 Console.WriteLine(NewCpf());
@@ -28,8 +45,7 @@ namespace GerarCpfValido
             var rest = 0;
             var multiplier1 = new [] { 10, 9, 8, 7, 6, 5, 4, 3, 2 };
             var multiplier2 = new[] { 11, 10, 9, 8, 7, 6, 5, 4, 3, 2 };
-            var randon = new Random();
-            var seed = randon.Next(100000000, 999999999).ToString();
+            var seed = GenerateRandomNumber();
 
             for (var i = 0; i < 9; i++)
                 sum += int.Parse(seed[i].ToString()) *multiplier1[i];
