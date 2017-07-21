@@ -10,7 +10,7 @@ namespace GerarCpfValido
     class Program
     {
         private static Random _random;
-        private static object syncObj = new object();
+        private static readonly object SyncObj = new object();
 
         private static void InitRandomNumber(int seed)
         {
@@ -19,7 +19,7 @@ namespace GerarCpfValido
 
         private static string GenerateRandomNumber()
         {
-            lock (syncObj)
+            lock (SyncObj)
             {
                 if (_random == null)
                     _random = new Random(); // Or exception...
